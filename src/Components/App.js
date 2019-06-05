@@ -10,12 +10,13 @@ import five from '../assets/img/five.png';
 import six from '../assets/img/six.png';
 import seven from '../assets/img/seven.png';
 import eight from '../assets/img/eight.png';
+import blank from '../assets/img/blank.png';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hello: "hello0",
+      searchSqaures: [],
       beginnerBoardMain: [
        [" "," "," "," "," "," "," "," "," "],
        [" "," "," "," "," "," "," "," "," "],
@@ -79,13 +80,13 @@ class App extends React.Component {
       if (bombArr[i]) {
         row.push({
           space: "X",
-          image: null
+          image: blank
         });
         test.push("X");
       } else {
         row.push({
           space: " ",
-          image: null
+          image: blank
         });
       test.push(" ");
       }
@@ -112,18 +113,116 @@ class App extends React.Component {
     let beginnerBoardMain = this.state.beginnerBoardMain;
     let arr =[one,two,three,four,five,six,seven,eight];
 
-
     if (beginnerBoardMain[bomb[0]][bomb[1]].space === 'X') {
       beginnerBoardMain[bomb[0]][bomb[1]].image = mine;
-  //    alert("GAME OVER" + bomb[0] +","+bomb[1]);
-    } else {
-      if (beginnerBoardMain[bomb[0]][bomb[1]].space > 0) {
-        beginnerBoardMain[bomb[0]][bomb[1]].image = arr[beginnerBoardMain[bomb[0]][bomb[1]].space-1]
-      }
-
+      alert("GAME OVER" + bomb[0] +","+bomb[1]);
+    } else if (beginnerBoardMain[bomb[0]][bomb[1]].space > 0) {
+      beginnerBoardMain[bomb[0]][bomb[1]].image = arr[beginnerBoardMain[bomb[0]][bomb[1]].space-1];
   //    alert(bomb[0] +","+bomb[1]);
+    } else {
+      beginnerBoardMain[bomb[0]][bomb[1]].image = null;
+      this.clickOnEmpty(bomb,beginnerBoardMain);
     }
     this.setState({beginnerBoardMain: beginnerBoardMain})
+  }
+
+
+  clickOnEmpty(position, board){
+ //   let board = this.state.beginnerBoardMain;
+    let newSearchSqaures = [];
+    let arr =[one,two,three,four,five,six,seven,eight];
+    let first = position.join(" ");
+    let spacesToSearchArray = [position];
+    console.log(spacesToSearchArray.length);
+    let spacesToSearchDictionary = {};
+
+    while (spacesToSearchArray.length > 0){
+     // debugger;
+      let pos = spacesToSearchArray[0];
+      if (board[pos[0]-1]) {
+        if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
+          board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
+        } else if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space === " ") {
+          board[pos[0]-1][pos[1]-1].image = null;
+          if (!spacesToSearchDictionary[[pos[0]-1,pos[1]-1]]) {
+            spacesToSearchArray.push([pos[0]-1,pos[1]-1]);
+            spacesToSearchDictionary[[pos[0]-1,pos[1]-1]] = true;
+          }
+        }
+        if (board[pos[0]-1][pos[1]] && board[pos[0]-1][pos[1]].space !== " " && board[pos[0]-1][pos[1]].space !== "X") {
+          board[pos[0]-1][pos[1]].image = arr[board[pos[0]-1][pos[1]].space-1];
+        } else if (board[pos[0]-1][pos[1]].space === " ") {
+          board[pos[0]-1][pos[1]].image = null;
+          if (!spacesToSearchDictionary[[pos[0]-1,pos[1]]]) {
+            spacesToSearchArray.push([pos[0]-1,pos[1]]);
+            spacesToSearchDictionary[[pos[0]-1,pos[1]]] = true;
+          }
+        }
+        if (board[pos[0]-1][pos[1]+1] && board[pos[0]-1][pos[1]+1].space !== " " && board[pos[0]-1][pos[1]+1].space !== "X") {
+          board[pos[0]-1][pos[1]+1].image = arr[board[pos[0]-1][pos[1]+1].space-1];
+        } else if (board[pos[0]-1][pos[1]+1] && board[pos[0]-1][pos[1]+1].space === " ") {
+          board[pos[0]-1][pos[1]+1].image = null;
+          if (!spacesToSearchDictionary[[pos[0]-1,pos[1]+1]]) {
+            spacesToSearchArray.push([pos[0]-1,pos[1]+1]);
+            spacesToSearchDictionary[[pos[0]-1,pos[1]+1]] = true;
+          }
+        }
+      }
+      //mid row
+      if (board[pos[0]][pos[1]-1] && board[pos[0]][pos[1]-1].space !== " " && board[pos[0]][pos[1]-1].space !== "X") {
+        board[pos[0]][pos[1]-1].image = arr[board[pos[0]][pos[1]-1].space-1];
+      } else if (board[pos[0]][pos[1]-1] && board[pos[0]][pos[1]-1].space === " ") {
+        board[pos[0]][pos[1]-1].image = null;
+        if (!spacesToSearchDictionary[[pos[0],pos[1]-1]]){
+          spacesToSearchArray.push([pos[0],pos[1]-1]);
+          spacesToSearchDictionary[[pos[0],pos[1]-1]] = true;
+        }
+      }
+      if (board[pos[0]][pos[1]+1] && board[pos[0]][pos[1]+1].space !== " " && board[pos[0]][pos[1]+1].space !== "X") {
+        board[pos[0]][pos[1]+1].image = arr[board[pos[0]][pos[1]+1].space-1];
+      } else if (board[pos[0]][pos[1]+1] && board[pos[0]][pos[1]+1].space === " ") {
+        board[pos[0]][pos[1]+1].image = null;
+        if (!spacesToSearchDictionary[[pos[0],pos[1]+1]]){
+          spacesToSearchArray.push([pos[0],pos[1]+1]);
+          spacesToSearchDictionary[[pos[0],pos[1]+1]] = true;
+        }
+      }
+      //bottom row
+      if (board[pos[0]+1]) {
+        if (board[pos[0]+1][pos[1]-1] && board[pos[0]+1][pos[1]-1].space !== " " && board[pos[0]+1][pos[1]-1].space !== "X") {
+          board[pos[0]+1][pos[1]-1].image = arr[board[pos[0]+1][pos[1]-1].space-1];
+        } else if (board[pos[0]+1][pos[1]-1] && board[pos[0]+1][pos[1]-1].space === " ") {
+          board[pos[0]+1][pos[1]-1].image = null;
+          if (!spacesToSearchDictionary[[pos[0]+1,pos[1]-1]]) {
+            spacesToSearchArray.push([pos[0]+1,pos[1]-1]);
+            spacesToSearchDictionary[[pos[0]+1,pos[1]-1]] = true;
+          }
+        }
+        if (board[pos[0]+1][pos[1]] && board[pos[0]+1][pos[1]].space !== " " && board[pos[0]+1][pos[1]].space !== "X") {
+          board[pos[0]+1][pos[1]].image = arr[board[pos[0]+1][pos[1]].space-1];
+        } else if (board[pos[0]+1][pos[1]].space === " ") {
+          board[pos[0]+1][pos[1]].image = null;
+          if (!spacesToSearchDictionary[[pos[0]+1,pos[1]]]) {
+            spacesToSearchArray.push([pos[0]+1,pos[1]]);
+            spacesToSearchDictionary[[pos[0]+1,pos[1]]] = true;
+          }
+         
+        }
+        if (board[pos[0]+1][pos[1]+1] && board[pos[0]+1][pos[1]+1].space !== " " && board[pos[0]+1][pos[1]+1].space !== "X") {
+          board[pos[0]+1][pos[1]+1].image = arr[board[pos[0]+1][pos[1]+1].space-1];
+        } else if (board[pos[0]+1][pos[1]+1] && board[pos[0]+1][pos[1]+1].space === " ") {
+          board[pos[0]+1][pos[1]+1].image = null;
+          if (!spacesToSearchDictionary[[pos[0]+1][pos[1]+1]]) {
+            spacesToSearchArray.push([pos[0]+1,pos[1]+1]);
+            spacesToSearchDictionary[[pos[0]+1,pos[1]+1]] = true;
+          }
+        }
+      }
+
+      spacesToSearchArray.shift();
+    }
+
+    this.setState({beginnerBoardMain: board, searchSqaures: spacesToSearchArray},console.log(spacesToSearchArray));
   }
 
   bombNumb(board){
@@ -171,8 +270,6 @@ class App extends React.Component {
     this.setState({beginnerBoardMain: board})
   }
 
-
-
   genBoard(bombLocations) {
     const board = (
       <table>
@@ -184,7 +281,6 @@ class App extends React.Component {
               )}
             </tr>
           )}
-  
         </tbody>
       </table>
     );
@@ -193,12 +289,9 @@ class App extends React.Component {
   }
 
 
-
   render(){
     return(
       <div>
-         <img src={mine}/>
-         <img src={one}/>
       <Board
         hello={this.state.hello}
         small={this.small}

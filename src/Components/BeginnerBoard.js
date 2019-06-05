@@ -15,7 +15,7 @@ function genBoard(bombLocations) {
           return <tr key={indexY}>
             {row.map((square,indexX)=>{
             x+=1;
-            return  <td key={indexX} onClick={()=>props.clickSquare([indexY,indexX])}><img src={square.image}/>{square.space}</td>
+            return  <td key={indexX} onClick={()=>props.clickSquare([indexY,indexX])}><img src={square.image}/></td>
             })}
           </tr>
         })}
