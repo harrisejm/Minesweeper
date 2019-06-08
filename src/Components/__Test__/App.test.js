@@ -8,6 +8,17 @@ const largeNewBoard = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,2
 
 const boardWithBombsArray = [0,,,,,,,,8,,,,,,,,16,,,,,,,,24,,,,,,,,,,,,,,,,,,,,,,,,,49,,,,,,,,57,,,60,,,,,,66,,,,,,72,,,,,,,,80];
 
+const bombs = [0,8,16,24,49,57,60,66,72,80];
+
+///Used for testing random();
+let bombsMockRandomNumberSmall = [0,7,14,21,45,52,54,59,64,71];
+function mockRandomNumberGen(mineNumb){
+  let mockRandomNumber = bombsMockRandomNumberSmall[0];
+  bombsMockRandomNumberSmall.shift();
+  return mockRandomNumber;
+}
+/////////
+
 const newBoard = new App;
 
 it('renders App without crashing', () => {
@@ -16,7 +27,9 @@ it('renders App without crashing', () => {
   ReactDOM.unmountComponentAtNode(div);
 });
 
-describe("Generates array of numbers for small, medium and large boards",()=> {
+
+
+describe("Generates array of numbers for small, medium and large boards using newBoard()",()=> {
 
   it('Creates small board with newBoard()', ()=> {
     expect(newBoard.newBoard(81)).toEqual(smallNewBoard);
@@ -29,11 +42,18 @@ describe("Generates array of numbers for small, medium and large boards",()=> {
   });
 });
 
-describe("Creates array of bombs placed in correct location for small, medium and large boards",()=>{
+
+describe("Creates array of bomb positions for small, medium and large boards using with bombs()",()=>{
+  it('Creates array of bomb positions for the small board using bombs()',()=>{
+      
+    expect(newBoard.bombs(newBoard.newBoard(81),81,mockRandomNumberGen,71)).toEqual(bombs);
+  })
+});
+
+
+describe("Creates array of bombs placed in correct location for small, medium and large boards using boardWithBombs()",()=>{
 
   it("Creates array of bombs for a small board with boardWithBombs()", ()=> {
-    const bombs = [0,8,16,24,49,57,60,66,72,80];
-    expect(newBoard.boardWithBombs(bombs)).toEqual(boardWithBombsArray);
+    expect(newBoard.boardWithBombs(bombs,newBoard.state.small)).toEqual(boardWithBombsArray);
   });
-
 });

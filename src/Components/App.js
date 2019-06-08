@@ -17,8 +17,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchSqaures: [],
-      beginnerBoardMain: []
+      beginnerBoardMain: [],
+      small: 81,
+      medium: 256,
+      large: 576
+
     }
     this.createBoard = this.createBoard.bind(this);
     this.bombs = this.bombs.bind(this);
@@ -40,22 +43,22 @@ class App extends React.Component {
   }
   
   ///array of bomb locations
-  bombs(arr, mineNumb){
-    let tempArr = arr.slice();
-    let arr1 = [];
-    while (mineNumb > 71) {
-       let selection = tempArr[this.randomNumber(mineNumb)];
-       arr1.push(selection);
-       let remove = tempArr.indexOf(selection);
-       tempArr.splice(remove, 1);
+  bombs(newBoard,mineNumb,randomNumber,minimumBombCount){
+    let tempNewBoard = newBoard.slice();
+    let arrayOfBombLocations = [];
+    while (mineNumb > minimumBombCount) {
+       let selection = tempNewBoard[randomNumber(mineNumb)];
+       arrayOfBombLocations.push(selection);
+       let remove = tempNewBoard.indexOf(selection);
+       tempNewBoard.splice(remove, 1);
        mineNumb--;
     }
-      return arr1
+      return arrayOfBombLocations
   }
 
-  boardWithBombs(bombPosition){
+  boardWithBombs(bombPosition,size){
     let boardArr = [];
-    boardArr.length = 81;
+    boardArr.length = size;
     for (let i=0; i<10; i++) {
       boardArr[bombPosition[i]] = bombPosition[i];
     }
@@ -88,7 +91,7 @@ class App extends React.Component {
     return finalBoard;
   }
   componentWillMount(){
-    this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(81),81)),81));
+    this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,71),this.state.small),this.state.small));
   }
   isGameOver(){
     let board = this.state.beginnerBoardMain;
