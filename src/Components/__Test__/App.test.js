@@ -8,11 +8,93 @@ const largeNewBoard = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,2
 
 const boardWithBombsArray = [0,,,,,,,,8,,,,,,,,16,,,,,,,,24,,,,,,,,,,,,,,,,,,,,,,,,,49,,,,,,,,57,,,60,,,,,,66,,,,,,72,,,,,,,,80];
 
+const vituralSmallBoard =  [ [ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' } ],
+[ { space: 'X', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: ' ', image: 'blank.png' },
+{ space: 'X', image: 'blank.png' } ] ];
+
 const bombs = [0,8,16,24,49,57,60,66,72,80];
 
 ///Used for testing random();
 let bombsMockRandomNumberSmall = [0,7,14,21,45,52,54,59,64,71];
-function mockRandomNumberGen(mineNumb){
+function mockRandomNumberGen(){
   let mockRandomNumber = bombsMockRandomNumberSmall[0];
   bombsMockRandomNumberSmall.shift();
   return mockRandomNumber;
@@ -45,7 +127,6 @@ describe("Generates array of numbers for small, medium and large boards using ne
 
 describe("Creates array of bomb positions for small, medium and large boards using with bombs()",()=>{
   it('Creates array of bomb positions for the small board using bombs()',()=>{
-      
     expect(newBoard.bombs(newBoard.newBoard(81),81,mockRandomNumberGen,71)).toEqual(bombs);
   })
 });
@@ -54,6 +135,148 @@ describe("Creates array of bomb positions for small, medium and large boards usi
 describe("Creates array of bombs placed in correct location for small, medium and large boards using boardWithBombs()",()=>{
 
   it("Creates array of bombs for a small board with boardWithBombs()", ()=> {
-    expect(newBoard.boardWithBombs(bombs,newBoard.state.small)).toEqual(boardWithBombsArray);
+    expect(newBoard.boardWithBombs(bombs,newBoard.state.small,10)).toEqual(boardWithBombsArray);
+  });
+});
+
+
+describe("Creates nested array with objects corresponding to each square, virtual boards with createBoard()",()=>{
+  it("Creates small virtual board",()=>{
+    expect(newBoard.createBoard(newBoard.boardWithBombs(bombs,newBoard.state.small,10),81)).toEqual(vituralSmallBoard);
+  });
+});
+
+describe("Checks for bomb locations when a square is clicked.",()=>{
+  const blankBoard = [
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}]
+  ];
+  const allBombsBoard = [
+    [{space:"X"},{space:"X"},{space:"X"}],
+    [{space:"X"},{space:" "},{space:"X"}],
+    [{space:"X"},{space:"X"},{space:"X"}]
+  ];
+  const allBombsBoardWithNumber = [
+    [{space:"X"},{space:"X"},{space:"X"}],
+    [{space:"X"},{space:8},{space:"X"}],
+    [{space:"X"},{space:"X"},{space:"X"}]
+  ];
+  const topLeftBoard = [
+    [{space:"X"},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}]
+  ];
+  const topBoard = [
+    [{space:" "},{space:"X"},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}]
+  ];
+  const topRightBoard = [
+    [{space:" "},{space:" "},{space:"X"}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}]
+  ];
+  const leftBoard = [
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:"X"},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}]
+  ];
+  const rightBoard = [
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:"X"}],
+    [{space:" "},{space:" "},{space:" "}]
+  ];
+  const leftBottomBoard = [
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:"X"},{space:" "},{space:" "}]
+  ];
+  const bottomBoard = [
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:"X"},{space:" "}]
+  ];
+  const rightBottomBoard = [
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:" "}],
+    [{space:" "},{space:" "},{space:"X"}]
+  ];
+
+  const blankTop = newBoard.topRowBombs(blankBoard,1,1);
+  const blankMiddle = newBoard.middleRowBombs(blankBoard,1,1);
+  const blankBottom = newBoard.bottomRowBombs(blankBoard,1,1);
+
+  const allBombsTop = newBoard.topRowBombs(allBombsBoard,1,1);
+  const allBombsMiddle = newBoard.middleRowBombs(allBombsBoard,1,1);
+  const allBombsBottom = newBoard.bottomRowBombs(allBombsBoard,1,1);
+  //
+  const topLeft = newBoard.topRowBombs(topLeftBoard,1,1);
+  const top = newBoard.topRowBombs(topBoard,1,1);
+  const topRight = newBoard.topRowBombs(topRightBoard,1,1);
+  
+  const left = newBoard.middleRowBombs(leftBoard,1,1);
+  const right = newBoard.middleRowBombs(rightBoard,1,1);
+
+  const leftBottom = newBoard.bottomRowBombs(leftBottomBoard,1,1);
+  const bottom = newBoard.bottomRowBombs(bottomBoard,1,1);
+  const rightBottom = newBoard.bottomRowBombs(rightBottomBoard,1,1);
+  //
+
+  it("Checks the TOP ROW for bombs with topRowBombs(). NO BOMBS, will return 0 if no bombs are found",()=>{
+    expect(blankTop).toEqual(0);
+  });
+  it("Checks the MIDDLE ROW for bombs with topRowBombs(). NO BOMBS, will return 0 if no bombs are found",()=>{
+    expect(blankMiddle).toEqual(0);
+  });
+  it("Checks the BOTTOM ROW for bombs with topRowBombs(). NO BOMBS, will return 0 if no bombs are found",()=>{
+    expect(blankBottom).toEqual(0);
+  });
+
+  it("Checks the TOP ROW for bombs with topRowBombs(). ALL BOMBS, will return 3 if all bombs are found",()=>{
+    expect(allBombsTop).toEqual(3);
+  });
+  it("Checks the MIDDLE ROW for bombs with topRowBombs(). ALL BOMBS, will return 2 if all bombs are found",()=>{
+    expect(allBombsMiddle).toEqual(2);
+  });
+  it("Checks the BOTTOM ROW for bombs with topRowBombs(). ALL BOMBS, will return 3 if all bombs are found",()=>{
+    expect(allBombsBottom).toEqual(3);
+  });
+
+///// topRowBombs()
+  it("Checks the TOP LEFT square for bomb with topRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(topLeft).toEqual(1);
+  });
+
+  it("Checks the TOP square for bomb with topRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(top).toEqual(1);
+  });
+
+  it("Checks the TOP RIGHT square for bomb with topRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(topRight).toEqual(1);
+  });
+////// middleRowBombs()
+  it("Checks the LEFT square for bomb with middleRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(left).toEqual(1);
+  });
+  it("Checks the RIGHT square for bomb with middleRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(right).toEqual(1);
+  });
+///// bottomRowBombs()
+  it("Checks the LEFT BOTTOM square for bomb with bottomRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(leftBottom).toEqual(1);
+  });
+  it("Checks the BOTTOM square for bomb with bottomRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(bottom).toEqual(1);
+  });
+  it("Checks the RIGHT BOTTOM square for bomb with bottomRowBombs(). Returns 1 if bomb is found",()=>{
+    expect(rightBottom).toEqual(1);
+  });
+ //// bombNumb()
+  it("Checks for bombs one space away from click square with bombNumb(). Runs topRowBombs(), middleRowBombs(), bottomRowBombs(). Changes the squares object property 'space' from ' ' to the number of bombs found. NO BOMBS, will return 0 if no bombs are found",()=>{
+    expect(newBoard.bombNumb(blankBoard,newBoard.topRowBombs,newBoard.middleRowBombs,newBoard.bottomRowBombs)).toEqual(blankBoard);
+  });
+  it("Checks for bombs one space away from click square with bombNumb(). Runs topRowBombs(), middleRowBombs(), bottomRowBombs(). Changes the squares object property 'space' from ' ' to the number of bombs found.ALL BOMBS, will return 8 if all spaces are bomb",()=>{
+    expect(newBoard.bombNumb(allBombsBoard,newBoard.topRowBombs,newBoard.middleRowBombs,newBoard.bottomRowBombs)).toEqual(allBombsBoardWithNumber);
   });
 });

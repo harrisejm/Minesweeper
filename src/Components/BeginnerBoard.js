@@ -1,14 +1,12 @@
 import React from 'react';
-import mine from '../assets/img/mine.jpeg';
 
 function BeginnerBoard(props){
 
   document.oncontextmenu = function() {
     return false;
-}
+  }
 
 function genBoard(bombLocations) {
-  let space;
   const board = (
     <table>
       <tbody>
@@ -27,16 +25,14 @@ function genBoard(bombLocations) {
       </tbody>
     </table>
   );
-  
+
   return board;
 }
     
-
-
 return (
-<div>
-{genBoard(props.beginnerBoardMain)}
-</div>
+  <div>
+    {genBoard(props.beginnerBoardMain)}
+  </div>
 );
 }
 

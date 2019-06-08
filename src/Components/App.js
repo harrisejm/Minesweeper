@@ -56,10 +56,10 @@ class App extends React.Component {
       return arrayOfBombLocations
   }
 
-  boardWithBombs(bombPosition,size){
+  boardWithBombs(bombPosition,size,numberOfBombs){
     let boardArr = [];
     boardArr.length = size;
-    for (let i=0; i<10; i++) {
+    for (let i=0; i<numberOfBombs; i++) {
       boardArr[bombPosition[i]] = bombPosition[i];
     }
     return boardArr;
@@ -88,11 +88,13 @@ class App extends React.Component {
       rowCount = 0;
       }
     }
+    //console.log(finalBoard);
     return finalBoard;
   }
   componentWillMount(){
-    this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,71),this.state.small),this.state.small));
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,71),this.state.small,10),this.state.small),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs)});
   }
+
   isGameOver(){
     let board = this.state.beginnerBoardMain;
     for (let i=0; i < board.length; i++) {
@@ -137,16 +139,12 @@ class App extends React.Component {
 
 
   clickOnEmpty(position, board){
- //   let board = this.state.beginnerBoardMain;
-    let newSearchSqaures = [];
     let arr =[one,two,three,four,five,six,seven,eight];
-    let first = position.join(" ");
     let spacesToSearchArray = [position];
     console.log(spacesToSearchArray.length);
     let spacesToSearchDictionary = {};
 
     while (spacesToSearchArray.length > 0){
-     // debugger;
       let pos = spacesToSearchArray[0];
       if (board[pos[0]-1]) {
         if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
@@ -234,7 +232,44 @@ class App extends React.Component {
     this.setState({beginnerBoardMain: board, searchSqaures: spacesToSearchArray},console.log(spacesToSearchArray));
   }
 
-  bombNumb(board){
+  topRowBombs(board,i,j){
+    let count = 0;
+    if (board[j-1] && board[i-1][j-1].space === "X") {
+      count+=1;
+    }
+    if (board[i-1][j].space === "X") {
+      count+=1;
+    }
+    if (board[j+1] && board[i-1][j+1].space === "X") {
+      count+=1;
+    }
+    return count;
+  }
+  middleRowBombs(board,i,j){
+    let count = 0;
+    if (board[j-1] && board[i][j-1].space === "X") {
+      count+=1;
+    }
+    if (board[j+1] && board[i][j+1].space === "X") {
+      count+=1;
+    }
+    return count;
+  }
+  bottomRowBombs(board,i,j){
+    let count = 0;
+    if (board[j-1] && board[i+1][j-1].space === "X") {
+      count+=1;
+    }
+    if (board[i+1][j].space === "X") {
+      count+=1;
+    }
+    if (board[j+1] && board[i+1][j+1].space === "X") {
+      count+=1;
+    }
+    return count;
+  }
+
+  bombNumb(board,topRowBombs,middleRowBombs,bottomRowBombs){
     for (let i=0; i<board.length; i++) {
       for (let j=0; j<board[0].length; j++) {
         if (board[i][j].space === "X") {
@@ -242,41 +277,20 @@ class App extends React.Component {
         }
         let count = 0;
         if(board[i-1]) {
-          if (board[j-1] && board[i-1][j-1].space === "X") {
-            count+=1;
-          }
-          if (board[i-1][j].space === "X") {
-            count+=1;
-          }
-          if (board[j+1] && board[i-1][j+1].space === "X") {
-            count+=1;
-          }
+          count += topRowBombs(board,i,j);
         }
         ////
-        if (board[j-1] && board[i][j-1].space === "X") {
-          count+=1;
-        }
-        if (board[j+1] && board[i][j+1].space === "X") {
-          count+=1;
-        }
+        count += middleRowBombs(board,i,j);
         ////
         if (board[i+1]) {
-          if (board[j-1] && board[i+1][j-1].space === "X") {
-            count+=1;
-          }
-          if (board[i+1][j].space === "X") {
-            count+=1;
-          }
-          if (board[j+1] && board[i+1][j+1].space === "X") {
-            count+=1;
-          }
+          count += bottomRowBombs(board,i,j);
         }
         if (count > 0) {
         board[i][j].space = count;
         }
       }
     }
-    this.setState({beginnerBoardMain: board})
+    return board;
   }
 
   genBoard(bombLocations) {
@@ -302,7 +316,6 @@ class App extends React.Component {
     return(
       <div>
       <Board
-        hello={this.state.hello}
         createBoard={this.createBoard}
         genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
