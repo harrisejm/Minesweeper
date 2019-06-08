@@ -3,6 +3,10 @@ import mine from '../assets/img/mine.jpeg';
 
 function BeginnerBoard(props){
 
+  document.oncontextmenu = function() {
+    return false;
+}
+
 function genBoard(bombLocations) {
   let space;
   const board = (
@@ -15,7 +19,7 @@ function genBoard(bombLocations) {
           return <tr key={indexY}>
             {row.map((square,indexX)=>{
             x+=1;
-            return  <td key={indexX} onClick={()=>props.clickSquare([indexY,indexX])}><img src={square.image}/></td>
+            return  <td key={indexX} onMouseDown={(e)=>props.clickSquare([indexY,indexX],e)}><img src={square.image}/></td>
             })}
           </tr>
         })}
