@@ -1,14 +1,98 @@
 td {
     border-style: solid;
-    height: 40px;
-    width: 40px;
-    
-}
-tr {
-  border: solid;
-  
+    border-width: 1px;
+    border-color: grey;
+    height: 18px;
+    width: 18px;
 }
 
 table {
     border-collapse: collapse;
+    border-width: 20px;
+}
+div.boardOutterHeader {
+    border-style: outset;
+    width: 189px;
+    height: 55px;
+    background-color: #cccccc;
+}
+div.boardInnerHeader {
+    border-style: inset;
+    width: 169px;
+    height: 35px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 7px;
+}
+
+div.boardOutterSmall {
+    border-style: none outset outset outset;
+    width: 189px;
+    height: 182px;
+    background-color: #cccccc;
+    top: -10px;
+    position: relative;
+}
+
+div.boardInnerSmall {
+    border-style: inset;
+    height: 169px;
+    width: 169px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 7px;
+}
+
+div.mineCounter {
+    /* border-style: solid; */
+    margin: 5px;
+    background-color: black;
+    width: 40px;
+    height: 24px;
+    float: left;
+    color: red;
+    text-align: right;
+    font-size: 25px;
+}
+div.mine {
+    top: -2px;
+    position: relative;
+    margin-right:1px;
+    /* color: red;
+    text-align: right;
+    font-size: 25px; */
+}
+div.mainButton {
+    border-style: solid;
+    width: 23px;
+    height: 23px;
+    float: left;
+    border-style: outset;
+    margin-left: 20px;
+    margin-top: 3px;
+}
+div.timer {
+
+    margin: 5px;
+    background-color: black;
+    width: 40px;
+    height: 24px;
+    float: left;
+    color: red;
+    text-align: right;
+    font-size: 25px;
+
+
+    margin-left: 25px;
+    float: left;
+    /* position: relative; */
+}
+img.mainButton {
+    width:23px;
+}
+
+img.square {
+  width: 20px;
+  height: 20px;
+  margin: -1px -1px -5px -1px;
 }

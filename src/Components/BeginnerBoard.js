@@ -1,4 +1,5 @@
 import React from 'react';
+import main from '../assets/img/main.png';
 
 function BeginnerBoard(props){
 
@@ -17,7 +18,11 @@ function genBoard(bombLocations) {
           return <tr key={indexY}>
             {row.map((square,indexX)=>{
             x+=1;
-            return  <td key={indexX} onMouseDown={(e)=>props.clickSquare([indexY,indexX],e)}><img src={square.image}/></td>
+            let displayImage;
+            if (square.image) {
+              displayImage = <img className='square' src={square.image}/>
+            }
+            return <td key={indexX} onMouseDown={(e)=>props.clickSquare([indexY,indexX],e)}>{displayImage}</td>
             })}
           </tr>
         })}
@@ -31,7 +36,24 @@ function genBoard(bombLocations) {
     
 return (
   <div>
-    {genBoard(props.beginnerBoardMain)}
+    <div className="boardOutterHeader">
+      <div className="boardInnerHeader">
+        <div className="mineCounter">
+          <div className="mine">{props.flagCount}</div>
+        </div>
+        <div className="mainButton">
+        <img className="mainButton" onMouseDown={(e)=>props.restartSmallBoard()} src={props.faceIcon}/>
+        </div>
+        <div className="timer">
+          <div className="mine">{props.timer}</div>
+        </div>
+      </div>
+    </div>
+    <div className="boardOutterSmall">
+      <div className="boardInnerSmall">
+        {genBoard(props.beginnerBoardMain)}
+      </div>
+    </div>
   </div>
 );
 }

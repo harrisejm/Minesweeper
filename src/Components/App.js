@@ -1,5 +1,4 @@
 import React from 'react';
-import '../Styles/App.css';
 import Board from './Board'
 import mine from '../assets/img/mine.jpeg';
 import one from '../assets/img/one.png';
@@ -12,22 +11,37 @@ import seven from '../assets/img/seven.png';
 import eight from '../assets/img/eight.png';
 import blank from '../assets/img/blank.png';
 import flag from '../assets/img/flag.png';
+import question from '../assets/img/question.png';
+import dead from '../assets/img/dead.png';
+import shock from '../assets/img/shock.png';
+import won from '../assets/img/won.png';
+import main from '../assets/img/main.png';
+import mineRed from '../assets/img/mineRed.jpg';
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       beginnerBoardMain: [],
-      small: 81,
+      small: 64,
       medium: 256,
-      large: 576
-
+      large: 576,
+      flagCount: 0,
+      faceIcon: main,
+      gameOver: false,
+      restart: false,
+      timer: 0,
+      firstMove: true
     }
     this.createBoard = this.createBoard.bind(this);
     this.bombs = this.bombs.bind(this);
     this.newBoard = this.newBoard.bind(this);
     this.boardWithBombs = this.boardWithBombs.bind(this);
     this.clickSquare = this.clickSquare.bind(this);
+    this.restartSmallBoard = this.restartSmallBoard.bind(this);
+    this.pressMainButton = this.pressMainButton.bind(this);
+    this.gameTimer = this.gameTimer.bind(this);
   }
 
   newBoard(size) {
@@ -82,7 +96,7 @@ class App extends React.Component {
         });
       }
       rowCount += 1;
-      if (rowCount === 9) {
+      if (rowCount === 8) {
       finalBoard.push(row);
       row = [];
       rowCount = 0;
@@ -92,7 +106,35 @@ class App extends React.Component {
     return finalBoard;
   }
   componentWillMount(){
-    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,71),this.state.small,10),this.state.small),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs)});
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs)});
+  }
+
+  pressMainButton(){
+    
+  }
+  
+
+
+  gameTimer(){
+   // let time = this.state.timer;
+    let numb = 1;
+    let t = setInterval(()=>{
+      if (this.state.gameOver === true || this.state.restart === true) {
+        clearInterval(t);
+        return;
+      }
+      this.setState({timer: numb}); 
+      numb += 1;
+      console.log(numb);
+    }, 1000);
+    
+  }
+
+
+
+
+  restartSmallBoard(){
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
   }
 
   isGameOver(){
@@ -104,31 +146,50 @@ class App extends React.Component {
         }
       }
     }
-    alert("You won");
+    this.setState({faceIcon:won,gameOver:true});
   }
 
   clickSquare(bomb,e){
     let beginnerBoardMain = this.state.beginnerBoardMain;
+    let flagCount = this.state.flagCount;
     let arr =[one,two,three,four,five,six,seven,eight];
+
+    if (this.state.firstMove === true) {
+      this.setState({firstMove: false,restart:false})
+      this.gameTimer();
+   //   setInterval(this.gameTimer, 1000);
+    }
+
+    if (this.state.gameOver === true) {
+      return;
+    }
 
     if (e.button === 2) {
       if (beginnerBoardMain[bomb[0]][bomb[1]].image === blank) {
         beginnerBoardMain[bomb[0]][bomb[1]].image = flag;
-        this.setState({beginnerBoardMain: beginnerBoardMain});
+        this.setState({beginnerBoardMain: beginnerBoardMain,flagCount:flagCount+1});
         return;
       } else if (beginnerBoardMain[bomb[0]][bomb[1]].image === flag) {
+        beginnerBoardMain[bomb[0]][bomb[1]].image = question;
+        this.setState({beginnerBoardMain: beginnerBoardMain,flagCount:flagCount-1});
+        return;
+      } else if (beginnerBoardMain[bomb[0]][bomb[1]].image === question) {
         beginnerBoardMain[bomb[0]][bomb[1]].image = blank;
         this.setState({beginnerBoardMain: beginnerBoardMain});
         return;
-      } 
+      }
+    }
+
+    if (beginnerBoardMain[bomb[0]][bomb[1]].image === flag || beginnerBoardMain[bomb[0]][bomb[1]].image === question) {
+      return;
     }
 
     if (beginnerBoardMain[bomb[0]][bomb[1]].space === 'X') {
-      beginnerBoardMain[bomb[0]][bomb[1]].image = mine;
-      alert("GAME OVER" + bomb[0] +","+bomb[1]);
+      beginnerBoardMain[bomb[0]][bomb[1]].image = mineRed;
+    //  clearInterval(this.gameTimer);
+      this.setState({faceIcon: dead,gameOver:true});
     } else if (beginnerBoardMain[bomb[0]][bomb[1]].space > 0) {
       beginnerBoardMain[bomb[0]][bomb[1]].image = arr[beginnerBoardMain[bomb[0]][bomb[1]].space-1];
-  //    alert(bomb[0] +","+bomb[1]);
     } else {
       beginnerBoardMain[bomb[0]][bomb[1]].image = null;
       this.clickOnEmpty(bomb,beginnerBoardMain);
@@ -320,7 +381,16 @@ class App extends React.Component {
         genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
         clickSquare={this.clickSquare}
+        restartSmallBoard={this.restartSmallBoard}
+        faceIcon={this.state.faceIcon}
+        flagCount={this.state.flagCount}
+        timer={this.state.timer}
+        gameTimer={this.gameTimer}
       />
+      <img src={dead}/>
+      <img src={shock}/>
+      <img src={won}/>
+      <img src={main}/>
       </div>
     );
   }

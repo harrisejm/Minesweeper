@@ -9,7 +9,13 @@ function Board(props){
       <BeginnerBoard 
         genBoard={props.genBoard}
         beginnerBoardMain={props.beginnerBoardMain}
-        clickSquare={props.clickSquare}/>
+        clickSquare={props.clickSquare}
+        restartSmallBoard={props.restartSmallBoard}
+        faceIcon={props.faceIcon}
+        flagCount={props.flagCount}
+        timer={props.timer}
+        gameTimer={props.gameTimer}
+      />
     </div>
   );
 }
