@@ -18,12 +18,19 @@ import won from '../assets/img/won.png';
 import main from '../assets/img/main.png';
 import mineRed from '../assets/img/mineRed.jpg';
 
+import { Switch, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom'
+
+import hello from './hello';
+import BeginnerBoard from './BeginnerBoard';
+import IntermediateBoard from './IntermediateBoard';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       beginnerBoardMain: [],
+      intermediateBoard: [],
       small: 64,
       medium: 256,
       large: 576,
@@ -32,7 +39,8 @@ class App extends React.Component {
       gameOver: false,
       restart: false,
       timer: 0,
-      firstMove: true
+      firstMove: true,
+      arr: [one,two,three,four,five,six,seven,eight]
     }
     this.createBoard = this.createBoard.bind(this);
     this.bombs = this.bombs.bind(this);
@@ -79,7 +87,7 @@ class App extends React.Component {
     return boardArr;
   }
 
-  createBoard(bombArr,size) {
+  createBoard(bombArr,size,rowLength) {
     let finalBoard = [];
     let row = [];
     let rowCount = 0;
@@ -96,7 +104,7 @@ class App extends React.Component {
         });
       }
       rowCount += 1;
-      if (rowCount === 8) {
+      if (rowCount === rowLength) {
       finalBoard.push(row);
       row = [];
       rowCount = 0;
@@ -106,17 +114,14 @@ class App extends React.Component {
     return finalBoard;
   }
   componentWillMount(){
-    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs)});
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small,8),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs)});
   }
 
   pressMainButton(){
     
   }
   
-
-
   gameTimer(){
-   // let time = this.state.timer;
     let numb = 1;
     let t = setInterval(()=>{
       if (this.state.gameOver === true || this.state.restart === true) {
@@ -126,15 +131,14 @@ class App extends React.Component {
       this.setState({timer: numb}); 
       numb += 1;
       console.log(numb);
-    }, 1000);
-    
+    }, 1000); 
   }
 
-
-
-
   restartSmallBoard(){
-    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small,8),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
+  }
+  restartIntermediateBoard(){
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.medium),this.state.medium,this.randomNumber,216),this.state.medium,40),this.state.medium,16),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
   }
 
   isGameOver(){
@@ -148,6 +152,9 @@ class App extends React.Component {
     }
     this.setState({faceIcon:won,gameOver:true});
   }
+  rightClick(){
+    
+  }
 
   clickSquare(bomb,e){
     let beginnerBoardMain = this.state.beginnerBoardMain;
@@ -157,7 +164,6 @@ class App extends React.Component {
     if (this.state.firstMove === true) {
       this.setState({firstMove: false,restart:false})
       this.gameTimer();
-   //   setInterval(this.gameTimer, 1000);
     }
 
     if (this.state.gameOver === true) {
@@ -198,11 +204,21 @@ class App extends React.Component {
     this.isGameOver();
   }
 
+  // topLeft(){
+  //   if (board[pos[0]-1]) {
+  //     if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
+  //       board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
+  //     }
+  //   }
+  // }
+
+  clearArea(pos){
+
+  }
 
   clickOnEmpty(position, board){
-    let arr =[one,two,three,four,five,six,seven,eight];
+    let arr = [one,two,three,four,five,six,seven,eight];
     let spacesToSearchArray = [position];
-    console.log(spacesToSearchArray.length);
     let spacesToSearchDictionary = {};
 
     while (spacesToSearchArray.length > 0){
@@ -354,31 +370,12 @@ class App extends React.Component {
     return board;
   }
 
-  genBoard(bombLocations) {
-    const board = (
-      <table>
-        <tbody>
-          {bombLocations.map((row,index)=>
-            <tr key={index}>
-              {row.map((square,index)=>
-                <td key={index}>{square}</td>
-              )}
-            </tr>
-          )}
-        </tbody>
-      </table>
-    );
-    this.setState(board);
-    return board;
-  }
-
-
   render(){
     return(
       <div>
-      <Board
+      {/* <Board
         createBoard={this.createBoard}
-        genBoard={this.genBoard}
+        // genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
         clickSquare={this.clickSquare}
         restartSmallBoard={this.restartSmallBoard}
@@ -386,11 +383,40 @@ class App extends React.Component {
         flagCount={this.state.flagCount}
         timer={this.state.timer}
         gameTimer={this.gameTimer}
-      />
-      <img src={dead}/>
+      /> */}
+      {this.props.children}
+      {/* <img src={dead}/>
       <img src={shock}/>
       <img src={won}/>
-      <img src={main}/>
+      <img src={main}/> */}
+      <p><Link to='/small' onClick={()=>this.restartSmallBoard()}>small</Link></p>
+      <p><Link to='/hello'>hello</Link></p>
+      <p><Link to='/intermediate' onClick={()=>this.restartIntermediateBoard()}>intermediate</Link></p>
+      <Switch>
+        <Route exact path='/small' render={()=><BeginnerBoard
+        createBoard={this.createBoard}
+        // genBoard={this.genBoard}
+        beginnerBoardMain={this.state.beginnerBoardMain}
+        clickSquare={this.clickSquare}
+        restartSmallBoard={this.restartSmallBoard}
+        faceIcon={this.state.faceIcon}
+        flagCount={this.state.flagCount}
+        timer={this.state.timer}
+        gameTimer={this.gameTimer}
+      />}/>
+        <Route exact path='/intermediate' render={()=><IntermediateBoard
+        createBoard={this.createBoard}
+        // genBoard={this.genBoard}
+        beginnerBoardMain={this.state.beginnerBoardMain}
+        clickSquare={this.clickSquare}
+        restartSmallBoard={this.restartSmallBoard}
+        faceIcon={this.state.faceIcon}
+        flagCount={this.state.flagCount}
+        timer={this.state.timer}
+        gameTimer={this.gameTimer}
+        />}/>
+        <Route exact path='/hello' component={hello}/>
+      </Switch>
       </div>
     );
   }

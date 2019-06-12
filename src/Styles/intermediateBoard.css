@@ -10,21 +10,7 @@ table {
     border-collapse: collapse;
     border-width: 20px;
 }
-/*  */
-div.boardOutterSmallHeader {
-    border-style: outset;
-    width: 189px;
-    height: 55px;
-    background-color: #cccccc;
-}
-div.boardInnerSmallHeader {
-    border-style: inset;
-    width: 169px;
-    height: 35px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 7px;
-}
+
 /* 169  - 189 */
 div.boardOutterIntermediateHeader {
     border-style: outset;
@@ -41,41 +27,7 @@ div.boardInnerIntermediateHeader {
     margin-top: 7px;
 }
 /*  */
-div.boardOutterIntermediateSmall {
-    border-style: none outset outset outset;
-    width: 357px;
-    height: 182px;
-    background-color: #cccccc;
-    top: -10px;
-    position: relative;
-}
 
-div.boardInnerIntermediateSmall {
-    border-style: inset;
-    height: 169px;
-    width: 337px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 7px;
-}
-/*  */
-div.boardOutterSmall {
-    border-style: none outset outset outset;
-    width: 189px;
-    height: 182px;
-    background-color: #cccccc;
-    top: -10px;
-    position: relative;
-}
-
-div.boardInnerSmall {
-    border-style: inset;
-    height: 169px;
-    width: 169px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 7px;
-}
 /*  */
 div.mineCounter {
     /* border-style: solid; */
