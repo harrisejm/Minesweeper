@@ -7,7 +7,7 @@ function IntermediateBoard(props){
   }
     
 return (
-  <div>
+  <div className="mainMedium">
     <div className="boardOutterIntermediateHeader">
       <div className="boardInnerIntermediateHeader">
         <div className="mineCounterIntermediate">

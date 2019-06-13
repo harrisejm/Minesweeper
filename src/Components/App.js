@@ -19,12 +19,14 @@ import main from '../assets/img/main.png';
 import mineRed from '../assets/img/mineRed.jpg';
 
 import { Switch, Route } from 'react-router-dom';
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 import hello from './hello';
 import BeginnerBoard from './BeginnerBoard';
 import IntermediateBoard from './IntermediateBoard';
 import ExpertBoard from './ExpertBoard';
+import Home from './Home';
+import Header from './Header';
 
 class App extends React.Component {
   constructor(props) {
@@ -34,7 +36,7 @@ class App extends React.Component {
       intermediateBoard: [],
       small: 64,
       medium: 256,
-      large: 576,
+      large: 480,//576, 
       flagCount: 0,
       faceIcon: main,
       gameOver: false,
@@ -114,7 +116,7 @@ class App extends React.Component {
       rowCount = 0;
       }
     }
-    //console.log(finalBoard);
+    console.log("works",finalBoard);
     return finalBoard;
   }
   componentWillMount(){
@@ -145,8 +147,9 @@ class App extends React.Component {
     this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.medium),this.state.medium,this.randomNumber,216),this.state.medium,40),this.state.medium,16),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
   }
   restartExpertBoard(){
-    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.large),this.state.large,this.randomNumber,477),this.state.large,99),this.state.large,30),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.large),this.state.large,this.randomNumber,381),this.state.large,99),this.state.large,30),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
   }
+  //24x24 477
 
   isGameOver(){
     let board = this.state.beginnerBoardMain;
@@ -158,9 +161,8 @@ class App extends React.Component {
       }
     }
     this.setState({faceIcon:won,gameOver:true});
-  }
-  rightClick(){
-    
+    }
+    rightClick(){  
   }
 
   clickSquare(bomb,e){
@@ -309,7 +311,6 @@ class App extends React.Component {
           }
         }
       }
-
       spacesToSearchArray.shift();
     }
 
@@ -318,36 +319,36 @@ class App extends React.Component {
 
   topRowBombs(board,i,j){
     let count = 0;
-    if (board[j-1] && board[i-1][j-1].space === "X") {
+    if (board[i][j-1] && board[i-1][j-1].space === "X") {
       count+=1;
     }
     if (board[i-1][j].space === "X") {
       count+=1;
     }
-    if (board[j+1] && board[i-1][j+1].space === "X") {
+    if (board[i][j+1] && board[i-1][j+1].space === "X") {
       count+=1;
     }
     return count;
   }
   middleRowBombs(board,i,j){
     let count = 0;
-    if (board[j-1] && board[i][j-1].space === "X") {
+    if (board[i][j-1] && board[i][j-1].space === "X") {
       count+=1;
     }
-    if (board[j+1] && board[i][j+1].space === "X") {
+    if (board[i][j+1] && board[i][j+1].space === "X") {
       count+=1;
     }
     return count;
   }
   bottomRowBombs(board,i,j){
     let count = 0;
-    if (board[j-1] && board[i+1][j-1].space === "X") {
+    if (board[i][j-1] && board[i+1][j-1].space === "X") {
       count+=1;
     }
     if (board[i+1][j].space === "X") {
       count+=1;
     }
-    if (board[j+1] && board[i+1][j+1].space === "X") {
+    if (board[i][j+1] && board[i+1][j+1].space === "X") {
       count+=1;
     }
     return count;
@@ -373,7 +374,7 @@ class App extends React.Component {
         board[i][j].space = count;
         }
       }
-    }
+    } console.log("bombArr", board)
     return board;
   }
 
@@ -403,23 +404,15 @@ class App extends React.Component {
   }
 
   render(){
+    console.log(this.state.beginnerBoardMain);
     return(
       <div>
-      {/* <Board
-        createBoard={this.createBoard}
-        // genBoard={this.genBoard}
-        beginnerBoardMain={this.state.beginnerBoardMain}
-        clickSquare={this.clickSquare}
+      <Header
         restartSmallBoard={this.restartSmallBoard}
-        faceIcon={this.state.faceIcon}
-        flagCount={this.state.flagCount}
-        timer={this.state.timer}
-        gameTimer={this.gameTimer}
-      /> */}
-      <p><Link to='/small' onClick={()=>this.restartSmallBoard()}>Small</Link></p>
-      <p><Link to='/intermediate' onClick={()=>this.restartIntermediateBoard()}>intermediate</Link></p>
-      <p><Link to='/expert' onClick={()=>this.restartExpertBoard()}>Expert</Link></p>
+        restartIntermediateBoard={this.restartIntermediateBoard}
+        restartExpertBoard={this.restartExpertBoard}/>
       <Switch>
+        <Route exact path='/' render={()=><Home/>}/>
         <Route exact path='/small' render={()=><BeginnerBoard
         genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}

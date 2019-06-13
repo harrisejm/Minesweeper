@@ -7,7 +7,7 @@ function ExpertBoard(props){
   }
     
 return (
-  <div>
+  <div className='mainLarge'>
     <div className="boardOutterExpertHeader">
       <div className="boardInnerExpertHeader">
         <div className="mineCounterExpert">

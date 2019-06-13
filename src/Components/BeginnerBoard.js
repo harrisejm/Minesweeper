@@ -7,7 +7,7 @@ function BeginnerBoard(props){
   }
     
 return (
-  <div>
+  <div className="mainSmall">
     <div className="boardOutterSmallHeader">
       <div className="boardInnerSmallHeader">
         <div className="mineCounter">

@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import App from './Components/App';
 import { HashRouter } from 'react-router-dom';
 
-import Routes from './routes'
-
-
 
 // ReactDOM.render(<App/>, document.getElementById('root'));
 

@@ -1,3 +1,39 @@
+div.mainNavbar {
+    margin-left: auto;
+    margin-right: auto;
+    border-style: solid;
+    width: 400px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+button {
+    margin: 5px;
+    font-size: 20px;
+}
+div.home {
+    border-style: solid;
+    text-align: center;
+}
+
+div.mainSmall {
+    border-style: solid;
+    width: 195px;
+    margin-right: auto;
+    margin-left: auto;
+}
+div.mainMedium {
+    border-style: solid;
+    width: 363px;
+    margin-right: auto;
+    margin-left: auto;
+}
+div.mainLarge {
+    border-style: solid;
+    width: 657px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 td {
     border-style: solid;
     border-width: 1px;
@@ -60,7 +96,7 @@ div.boardInnerExpertHeader {
 div.boardOutterExpert {
     border-style: none outset outset outset;
     width: 651px;
-    height: 413px;
+    height: 350px;
     background-color: #cccccc;
     top: -10px;
     position: relative;
@@ -68,7 +104,7 @@ div.boardOutterExpert {
 div.boardInnerExpert {
     border-style: inset;
     width: 631px;
-    height: 400px;
+    height: 337px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 7px;
