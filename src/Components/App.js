@@ -24,6 +24,7 @@ import { Link } from 'react-router-dom'
 import hello from './hello';
 import BeginnerBoard from './BeginnerBoard';
 import IntermediateBoard from './IntermediateBoard';
+import ExpertBoard from './ExpertBoard';
 
 class App extends React.Component {
   constructor(props) {
@@ -48,8 +49,11 @@ class App extends React.Component {
     this.boardWithBombs = this.boardWithBombs.bind(this);
     this.clickSquare = this.clickSquare.bind(this);
     this.restartSmallBoard = this.restartSmallBoard.bind(this);
+    this.restartIntermediateBoard = this.restartIntermediateBoard.bind(this);
+    this.restartExpertBoard = this.restartExpertBoard.bind(this);
     this.pressMainButton = this.pressMainButton.bind(this);
     this.gameTimer = this.gameTimer.bind(this);
+    this.genBoard = this.genBoard.bind(this);
   }
 
   newBoard(size) {
@@ -139,6 +143,9 @@ class App extends React.Component {
   }
   restartIntermediateBoard(){
     this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.medium),this.state.medium,this.randomNumber,216),this.state.medium,40),this.state.medium,16),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
+  }
+  restartExpertBoard(){
+    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.large),this.state.large,this.randomNumber,477),this.state.large,99),this.state.large,30),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
   }
 
   isGameOver(){
@@ -370,6 +377,31 @@ class App extends React.Component {
     return board;
   }
 
+  genBoard(bombLocations) {
+    const board = (
+      <table>
+        <tbody>
+          {bombLocations.map((row,indexY)=>{
+            let y = -1;
+            let x = -1;
+            y+=1;       
+            return <tr key={indexY}>
+              {row.map((square,indexX)=>{
+              x+=1;
+              let displayImage;
+              if (square.image) {
+                displayImage = <img className='square' src={square.image}/>
+              }
+              return <td key={indexX} onMouseDown={(e)=>this.clickSquare([indexY,indexX],e)}>{displayImage}</td>
+              })}
+            </tr>
+          })}
+        </tbody>
+      </table>
+    );
+    return board;
+  }
+
   render(){
     return(
       <div>
@@ -384,20 +416,13 @@ class App extends React.Component {
         timer={this.state.timer}
         gameTimer={this.gameTimer}
       /> */}
-      {this.props.children}
-      {/* <img src={dead}/>
-      <img src={shock}/>
-      <img src={won}/>
-      <img src={main}/> */}
-      <p><Link to='/small' onClick={()=>this.restartSmallBoard()}>small</Link></p>
-      <p><Link to='/hello'>hello</Link></p>
+      <p><Link to='/small' onClick={()=>this.restartSmallBoard()}>Small</Link></p>
       <p><Link to='/intermediate' onClick={()=>this.restartIntermediateBoard()}>intermediate</Link></p>
+      <p><Link to='/expert' onClick={()=>this.restartExpertBoard()}>Expert</Link></p>
       <Switch>
         <Route exact path='/small' render={()=><BeginnerBoard
-        createBoard={this.createBoard}
-        // genBoard={this.genBoard}
+        genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
-        clickSquare={this.clickSquare}
         restartSmallBoard={this.restartSmallBoard}
         faceIcon={this.state.faceIcon}
         flagCount={this.state.flagCount}
@@ -405,11 +430,20 @@ class App extends React.Component {
         gameTimer={this.gameTimer}
       />}/>
         <Route exact path='/intermediate' render={()=><IntermediateBoard
-        createBoard={this.createBoard}
-        // genBoard={this.genBoard}
+        // createBoard={this.createBoard}
+        genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
-        clickSquare={this.clickSquare}
-        restartSmallBoard={this.restartSmallBoard}
+        // clickSquare={this.clickSquare}
+        restartIntermediateBoard={this.restartIntermediateBoard}
+        faceIcon={this.state.faceIcon}
+        flagCount={this.state.flagCount}
+        timer={this.state.timer}
+        gameTimer={this.gameTimer}
+        />}/>
+        <Route exact path='/expert' render={()=><ExpertBoard
+        genBoard={this.genBoard}
+        beginnerBoardMain={this.state.beginnerBoardMain}
+        restartExpertBoard={this.restartExpertBoard}
         faceIcon={this.state.faceIcon}
         flagCount={this.state.flagCount}
         timer={this.state.timer}
