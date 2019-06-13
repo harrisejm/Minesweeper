@@ -119,8 +119,17 @@ class App extends React.Component {
     console.log("works",finalBoard);
     return finalBoard;
   }
-  componentWillMount(){
-    this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.small),this.state.small,this.randomNumber,54),this.state.small,10),this.state.small,8),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs)});
+  componentWillMount(props){
+    let currentPage = window.location.href.split('/');
+    let page = currentPage[currentPage.length-1];
+   // window.location.href.split('/')[window.location.href.split('/').length-1])
+    if (page === "beginner") {
+      this.restartSmallBoard();
+    } else if (page === 'intermediate') {
+      this.restartIntermediateBoard();
+    } else if (page === 'expert'){
+      this.restartExpertBoard();
+    }
   }
 
   pressMainButton(){
@@ -405,6 +414,7 @@ class App extends React.Component {
 
   render(){
     console.log(this.state.beginnerBoardMain);
+    console.log("look here", window.location.href.split('/')[window.location.href.split('/').length-1]);
     return(
       <div>
       <Header
@@ -413,7 +423,7 @@ class App extends React.Component {
         restartExpertBoard={this.restartExpertBoard}/>
       <Switch>
         <Route exact path='/' render={()=><Home/>}/>
-        <Route exact path='/small' render={()=><BeginnerBoard
+        <Route exact path='/beginner' render={()=><BeginnerBoard
         genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
         restartSmallBoard={this.restartSmallBoard}

@@ -11,24 +11,24 @@ button {
     font-size: 20px;
 }
 div.home {
-    border-style: solid;
+    /* border-style: solid; */
     text-align: center;
 }
 
 div.mainSmall {
-    border-style: solid;
+    /* border-style: solid; */
     width: 195px;
     margin-right: auto;
     margin-left: auto;
 }
 div.mainMedium {
-    border-style: solid;
+    /* border-style: solid; */
     width: 363px;
     margin-right: auto;
     margin-left: auto;
 }
 div.mainLarge {
-    border-style: solid;
+    /* border-style: solid; */
     width: 657px;
     margin-right: auto;
     margin-left: auto;
