@@ -14,7 +14,7 @@ return (
           <div className="mine">{props.flagCount}</div>
         </div>
         <div className="mainButtonExpert">
-        <img className="mainButton" onMouseDown={(e)=>props.restartExpertBoard()} src={props.faceIcon}/>
+        <img className="mainButton" onMouseDown={(e)=>props.restartExpertBoard()} src={props.faceIcon} alt="Main Button"/>
         </div>
         <div className="timerExpert">
           <div className="mine">{props.timer}</div>

@@ -14,7 +14,7 @@ return (
           <div className="mine">{props.flagCount}</div>
         </div>
         <div className="mainButtonIntermediate">
-        <img className="mainButton" onMouseDown={(e)=>props.restartIntermediateBoard()} src={props.faceIcon}/>
+        <img className="mainButton" onMouseDown={(e)=>props.restartIntermediateBoard()} src={props.faceIcon} alt="Main Button"/>
         </div>
         <div className="timerIntermediate">
           <div className="mine">{props.timer}</div>

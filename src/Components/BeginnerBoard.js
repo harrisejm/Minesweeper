@@ -14,7 +14,7 @@ return (
           <div className="mine">{props.flagCount}</div>
         </div>
         <div className="mainButton">
-        <img className="mainButton" onMouseDown={(e)=>props.restartSmallBoard()} src={props.faceIcon}/>
+        <img className="mainButton" onMouseDown={(e)=>props.restartSmallBoard()} src={props.faceIcon} alt="Main Button"/>
         </div>
         <div className="timer">
           <div className="mine">{props.timer}</div>

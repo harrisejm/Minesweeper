@@ -1,6 +1,4 @@
 import React from 'react';
-import Board from './Board'
-import mine from '../assets/img/mine.jpeg';
 import one from '../assets/img/one.png';
 import two from '../assets/img/two.png';
 import three from '../assets/img/three.png';
@@ -13,15 +11,15 @@ import blank from '../assets/img/blank.png';
 import flag from '../assets/img/flag.png';
 import question from '../assets/img/question.png';
 import dead from '../assets/img/dead.png';
-import shock from '../assets/img/shock.png';
 import won from '../assets/img/won.png';
 import main from '../assets/img/main.png';
 import mineRed from '../assets/img/mineRed.jpg';
 
-import { Switch, Route } from 'react-router-dom';
-// import { Link } from 'react-router-dom'
+//import mine from '../assets/img/mine.jpeg';
+//import shock from '../assets/img/shock.png';
 
-import hello from './hello';
+import { Switch, Route } from 'react-router-dom';
+
 import BeginnerBoard from './BeginnerBoard';
 import IntermediateBoard from './IntermediateBoard';
 import ExpertBoard from './ExpertBoard';
@@ -53,7 +51,6 @@ class App extends React.Component {
     this.restartSmallBoard = this.restartSmallBoard.bind(this);
     this.restartIntermediateBoard = this.restartIntermediateBoard.bind(this);
     this.restartExpertBoard = this.restartExpertBoard.bind(this);
-    this.pressMainButton = this.pressMainButton.bind(this);
     this.gameTimer = this.gameTimer.bind(this);
     this.genBoard = this.genBoard.bind(this);
   }
@@ -116,13 +113,12 @@ class App extends React.Component {
       rowCount = 0;
       }
     }
-    console.log("works",finalBoard);
     return finalBoard;
   }
+
   componentWillMount(props){
     let currentPage = window.location.href.split('/');
     let page = currentPage[currentPage.length-1];
-   // window.location.href.split('/')[window.location.href.split('/').length-1])
     if (page === "beginner") {
       this.restartSmallBoard();
     } else if (page === 'intermediate') {
@@ -130,10 +126,6 @@ class App extends React.Component {
     } else if (page === 'expert'){
       this.restartExpertBoard();
     }
-  }
-
-  pressMainButton(){
-    
   }
   
   gameTimer(){
@@ -145,7 +137,6 @@ class App extends React.Component {
       }
       this.setState({timer: numb}); 
       numb += 1;
-      console.log(numb);
     }, 1000); 
   }
 
@@ -210,7 +201,6 @@ class App extends React.Component {
 
     if (beginnerBoardMain[bomb[0]][bomb[1]].space === 'X') {
       beginnerBoardMain[bomb[0]][bomb[1]].image = mineRed;
-    //  clearInterval(this.gameTimer);
       this.setState({faceIcon: dead,gameOver:true});
     } else if (beginnerBoardMain[bomb[0]][bomb[1]].space > 0) {
       beginnerBoardMain[bomb[0]][bomb[1]].image = arr[beginnerBoardMain[bomb[0]][bomb[1]].space-1];
@@ -222,20 +212,30 @@ class App extends React.Component {
     this.isGameOver();
   }
 
-  // topLeft(){
-  //   if (board[pos[0]-1]) {
-  //     if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
-  //       board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
-  //     }
-  //   }
-  // }
-
-  clearArea(pos){
-
+  checkTopRightForNumber(b,pos,arr){
+    let board = b.map(x => Object.assign({},x));
+      if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
+       board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
+      //arr[board[pos[0]-1][pos[1]-1].space-1]; //returns number image
+      }
+      return board;
+  }
+  checkTopForNumber(board,pos,arr){
+    if (board[pos[0]-1][pos[1]] && board[pos[0]-1][pos[1]].space !== " " && board[pos[0]-1][pos[1]].space !== "X") {
+    //  board[pos[0]-1][pos[1]].image = arr[board[pos[0]-1][pos[1]].space-1];
+      return arr[board[pos[0]-1][pos[1]].space-1];
+    } 
+  }
+  checkTopLeftForNumber(board,pos,arr){
+    if (board[pos[0]-1][pos[1]+1] && board[pos[0]-1][pos[1]+1].space !== " " && board[pos[0]-1][pos[1]+1].space !== "X") {
+      board[pos[0]-1][pos[1]+1].image = arr[board[pos[0]-1][pos[1]+1].space-1];
+       return arr[board[pos[0]-1][pos[1]+1].space-1];
+    }
   }
 
+
   clickOnEmpty(position, board){
-    let arr = [one,two,three,four,five,six,seven,eight];
+    let arr = [one,two,three,four,five,six,seven,eight]; //images
     let spacesToSearchArray = [position];
     let spacesToSearchDictionary = {};
 
@@ -251,6 +251,7 @@ class App extends React.Component {
             spacesToSearchDictionary[[pos[0]-1,pos[1]-1]] = true;
           }
         }
+        
         if (board[pos[0]-1][pos[1]] && board[pos[0]-1][pos[1]].space !== " " && board[pos[0]-1][pos[1]].space !== "X") {
           board[pos[0]-1][pos[1]].image = arr[board[pos[0]-1][pos[1]].space-1];
         } else if (board[pos[0]-1][pos[1]].space === " ") {
@@ -260,6 +261,7 @@ class App extends React.Component {
             spacesToSearchDictionary[[pos[0]-1,pos[1]]] = true;
           }
         }
+
         if (board[pos[0]-1][pos[1]+1] && board[pos[0]-1][pos[1]+1].space !== " " && board[pos[0]-1][pos[1]+1].space !== "X") {
           board[pos[0]-1][pos[1]+1].image = arr[board[pos[0]-1][pos[1]+1].space-1];
         } else if (board[pos[0]-1][pos[1]+1] && board[pos[0]-1][pos[1]+1].space === " ") {
@@ -308,7 +310,6 @@ class App extends React.Component {
             spacesToSearchArray.push([pos[0]+1,pos[1]]);
             spacesToSearchDictionary[[pos[0]+1,pos[1]]] = true;
           }
-         
         }
         if (board[pos[0]+1][pos[1]+1] && board[pos[0]+1][pos[1]+1].space !== " " && board[pos[0]+1][pos[1]+1].space !== "X") {
           board[pos[0]+1][pos[1]+1].image = arr[board[pos[0]+1][pos[1]+1].space-1];
@@ -323,7 +324,7 @@ class App extends React.Component {
       spacesToSearchArray.shift();
     }
 
-    this.setState({beginnerBoardMain: board, searchSqaures: spacesToSearchArray},console.log(spacesToSearchArray));
+    this.setState({beginnerBoardMain: board, searchSqaures: spacesToSearchArray});
   }
 
   topRowBombs(board,i,j){
@@ -383,7 +384,7 @@ class App extends React.Component {
         board[i][j].space = count;
         }
       }
-    } console.log("bombArr", board)
+    }
     return board;
   }
 
@@ -391,16 +392,12 @@ class App extends React.Component {
     const board = (
       <table>
         <tbody>
-          {bombLocations.map((row,indexY)=>{
-            let y = -1;
-            let x = -1;
-            y+=1;       
+          {bombLocations.map((row,indexY)=>{  
             return <tr key={indexY}>
               {row.map((square,indexX)=>{
-              x+=1;
               let displayImage;
               if (square.image) {
-                displayImage = <img className='square' src={square.image}/>
+                displayImage = <img className='square' src={square.image} alt="square"/>
               }
               return <td key={indexX} onMouseDown={(e)=>this.clickSquare([indexY,indexX],e)}>{displayImage}</td>
               })}
@@ -413,8 +410,6 @@ class App extends React.Component {
   }
 
   render(){
-    console.log(this.state.beginnerBoardMain);
-    console.log("look here", window.location.href.split('/')[window.location.href.split('/').length-1]);
     return(
       <div>
       <Header
@@ -452,7 +447,6 @@ class App extends React.Component {
         timer={this.state.timer}
         gameTimer={this.gameTimer}
         />}/>
-        <Route exact path='/hello' component={hello}/>
       </Switch>
       </div>
     );
