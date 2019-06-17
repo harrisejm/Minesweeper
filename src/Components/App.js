@@ -14,6 +14,8 @@ import dead from '../assets/img/dead.png';
 import won from '../assets/img/won.png';
 import main from '../assets/img/main.png';
 import mineRed from '../assets/img/mineRed.jpg';
+import firebase from 'firebase';
+import firebaseConfig from '../firebaseConfig';
 
 //import mine from '../assets/img/mine.jpeg';
 //import shock from '../assets/img/shock.png';
@@ -117,6 +119,12 @@ class App extends React.Component {
   }
 
   componentWillMount(props){
+    let dbClick = firebase.database().ref('test');
+    dbClick.on('value',(snapshot)=> {
+      let test = snapshot.val();
+      console.log(test.test);
+      });
+  
     let currentPage = window.location.href.split('/');
     let page = currentPage[currentPage.length-1];
     if (page === "beginner") {
