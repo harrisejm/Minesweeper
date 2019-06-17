@@ -18,7 +18,7 @@ import mineRed from '../assets/img/mineRed.jpg';
 //import mine from '../assets/img/mine.jpeg';
 //import shock from '../assets/img/shock.png';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, HashRouter as Router } from 'react-router-dom';
 
 import BeginnerBoard from './BeginnerBoard';
 import IntermediateBoard from './IntermediateBoard';
@@ -215,10 +215,13 @@ class App extends React.Component {
   checkTopRightForNumber(b,pos,arr){
     let board = b.map(x => Object.assign({},x));
       if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
-       board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
-      //arr[board[pos[0]-1][pos[1]-1].space-1]; //returns number image
+     //  board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
+         return arr[board[pos[0]-1][pos[1]-1].space-1]; //returns number image
       }
-      return board;
+    //  return board;
+  }
+  topLeft() {
+
   }
   checkTopForNumber(board,pos,arr){
     if (board[pos[0]-1][pos[1]] && board[pos[0]-1][pos[1]].space !== " " && board[pos[0]-1][pos[1]].space !== "X") {
@@ -242,6 +245,7 @@ class App extends React.Component {
     while (spacesToSearchArray.length > 0){
       let pos = spacesToSearchArray[0];
       if (board[pos[0]-1]) {
+
         if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space !== " " && board[pos[0]-1][pos[1]-1].space !== "X") {
           board[pos[0]-1][pos[1]-1].image = arr[board[pos[0]-1][pos[1]-1].space-1];
         } else if (board[pos[0]-1][pos[1]-1] && board[pos[0]-1][pos[1]-1].space === " ") {
@@ -416,6 +420,7 @@ class App extends React.Component {
         restartSmallBoard={this.restartSmallBoard}
         restartIntermediateBoard={this.restartIntermediateBoard}
         restartExpertBoard={this.restartExpertBoard}/>
+      <Router>
       <Switch>
         <Route exact path='/' render={()=><Home/>}/>
         <Route exact path='/beginner' render={()=><BeginnerBoard
@@ -448,6 +453,7 @@ class App extends React.Component {
         gameTimer={this.gameTimer}
         />}/>
       </Switch>
+      </Router>
       </div>
     );
   }

@@ -1,4 +1,21 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+# Minesweeper
+
+#### By Eddie Harris
+
+Live site: https://minesweeper-edward-harris.web.app
+
+## Project Description
+
+Classic Minesweeper game. Includes beginner, medium and expert mode.
+
+## Setup
+
+* Clone repository
+* Save to Desktop
+* While in the root directory, run the command "npm install"
+* After the installation is complete, run the command "npm run start", then navigate to http://localhost:3000/.
+
 
 ## Available Scripts
 

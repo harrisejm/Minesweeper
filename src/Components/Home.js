@@ -3,6 +3,8 @@ import "../Styles/board.css";
 import github from '../assets/img/Github.png';
 import linkedIn from '../assets/img/LinkedIn.png';
 import email from '../assets/img/email.png';
+import mainLogo from '../assets/img/mainLogo.png';
+
 
 function Home(){
 
@@ -36,11 +38,19 @@ function Home(){
             <div className="emailImage">
               <img className="icons" src={email} alt="linkedin"/>
             </div>
-            <p className="inforEmail">Email: Edward Harris</p>
+            <p className="infoEmail">Email: Edward Harris</p>
             </a>
           </div>
         </div>
-
+        <p className="chessInfo">If you like this game, also checkout my online chess game. Two players can play against each other on two different devices or locally on one screen.</p>
+        <div className="chessGame">    
+          <a href="https://chess-eddie-harris.web.app" target="_blank" rel="noopener noreferrer">
+            <div className="mainLogoImage">
+              <img className="logoWidth" src={mainLogo} alt="Chess Piece"/>
+            </div>
+            <p className="infoChess">Online Chess</p>
+          </a>
+        </div>
 
       </div> 
   )
