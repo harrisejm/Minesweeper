@@ -1,12 +1,13 @@
 import React from 'react';
 
 function BeginnerBoard(props){
-
+  console.log(props.highscores.beginner);
   document.oncontextmenu = function() {
     return false;
   }
     
 return (
+  <div>
   <div className="mainSmall">
     <div className="boardOutterSmallHeader">
       <div className="boardInnerSmallHeader">
@@ -26,6 +27,10 @@ return (
         {props.genBoard(props.beginnerBoardMain,props)}
       </div>
     </div>
+  </div>
+  <div className="highscoreSmall">
+  
+  </div>
   </div>
 );
 }

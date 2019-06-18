@@ -112,7 +112,7 @@ div.home {
 }
 
 div.mainSmall {
-    /* border-style: solid; */
+    border-style: solid;
     width: 195px;
     margin-right: auto;
     margin-left: auto;
@@ -144,6 +144,8 @@ table {
 }
 /*  */
 div.boardOutterSmallHeader {
+    margin-left: auto;
+    margin-right: auto;
     border-style: outset;
     width: 189px;
     height: 55px;

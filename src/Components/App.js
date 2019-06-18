@@ -43,7 +43,8 @@ class App extends React.Component {
       restart: false,
       timer: 0,
       firstMove: true,
-      arr: [one,two,three,four,five,six,seven,eight]
+      arr: [one,two,three,four,five,six,seven,eight],
+      highscores: {}
     }
     this.createBoard = this.createBoard.bind(this);
     this.bombs = this.bombs.bind(this);
@@ -118,13 +119,24 @@ class App extends React.Component {
     return finalBoard;
   }
 
-  componentWillMount(props){
-    let dbClick = firebase.database().ref('test');
+  addHighScoresFromFirebase(){
+    let dbClick = firebase.database().ref('highscores');
     dbClick.on('value',(snapshot)=> {
       let test = snapshot.val();
-      console.log(test.test);
+      this.setState({highscores: test});
+      console.log(this.state.highscores);
       });
-  
+  }
+  addHighscore(){
+    let dbClick = firebase.database().ref('highscores/beginner');
+    let beginner = dbClick.push();
+    beginner.set({
+      name: "Eddie",
+      time: 24
+    });
+  }
+
+  componentWillMount(props){  
     let currentPage = window.location.href.split('/');
     let page = currentPage[currentPage.length-1];
     if (page === "beginner") {
@@ -157,7 +169,6 @@ class App extends React.Component {
   restartExpertBoard(){
     this.setState({beginnerBoardMain: this.bombNumb(this.createBoard(this.boardWithBombs(this.bombs(this.newBoard(this.state.large),this.state.large,this.randomNumber,381),this.state.large,99),this.state.large,30),this.topRowBombs,this.middleRowBombs,this.bottomRowBombs), faceIcon:main,firstMove:true, gameOver:false,restart:true,flagCount:0,timer:0});
   }
-  //24x24 477
 
   isGameOver(){
     let board = this.state.beginnerBoardMain;
@@ -169,9 +180,8 @@ class App extends React.Component {
       }
     }
     this.setState({faceIcon:won,gameOver:true});
-    }
-    rightClick(){  
   }
+
 
   clickSquare(bomb,e){
     let beginnerBoardMain = this.state.beginnerBoardMain;
@@ -439,6 +449,7 @@ class App extends React.Component {
         flagCount={this.state.flagCount}
         timer={this.state.timer}
         gameTimer={this.gameTimer}
+        highscores={this.state.highscores}
       />}/>
         <Route exact path='/intermediate' render={()=><IntermediateBoard
         // createBoard={this.createBoard}
