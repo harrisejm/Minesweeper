@@ -48,6 +48,7 @@ return (
     </div>
   </div>
   <p className="scoreTitle">High Scores</p>
+  <p className="scoreType">Beginner</p>
   <div className="highscoreSmall">
     {props.highscores.map((score,index) =>{
       return (<div key={index} className="scoreEntry">

@@ -42,7 +42,7 @@ function Home(){
             </a>
           </div>
         </div>
-        <p className="chessInfo">If you like this game, also checkout my online chess game. Two players can play against each other on two different devices or locally on one screen.</p>
+        <p className="chessInfo">If you liked my version of minesweepr, also checkout my online chess game. Two players can play against each other on two different devices or locally on one screen.</p>
         <div className="chessGame">    
           <a href="https://chess-eddie-harris.web.app" target="_blank" rel="noopener noreferrer">
             <div className="mainLogoImage">

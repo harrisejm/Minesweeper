@@ -14,6 +14,8 @@ import dead from '../assets/img/dead.png';
 import won from '../assets/img/won.png';
 import main from '../assets/img/main.png';
 import mineRed from '../assets/img/mineRed.jpg';
+import background from '../assets/img/background.jpg';
+
 import firebase from 'firebase';
 import firebaseConfig from '../firebaseConfig';
 
@@ -49,10 +51,11 @@ class App extends React.Component {
       firstMove: true,
       playerName: "",
       arr: [one,two,three,four,five,six,seven,eight],
+      openHighscoreModal: false,
       highscores: {
-        beginner: [{},{},{},{},{},{},{},{},{},{}],
-        intermediate: [{},{},{},{},{},{},{},{},{},{}],
-        expert: [{},{},{},{},{},{},{},{},{},{}]
+        beginner: [],
+        intermediate: [],
+        expert: []
       }
     }
     this.createBoard = this.createBoard.bind(this);
@@ -68,6 +71,7 @@ class App extends React.Component {
     this.submitScore = this.submitScore.bind(this);
     this.enterScore = this.enterScore.bind(this);
     this.checkForNewHighscore = this.checkForNewHighscore.bind(this);
+    this.showHighscoreModal = this.showHighscoreModal.bind(this);
   }
 
   newBoard(size) {
@@ -178,10 +182,6 @@ class App extends React.Component {
       scores = firebase.database().ref('highscores/expert');
       scoreArray = allScores.expert;
     }
-  
-    console.log("New",scoreArray)
-   // let scoreArray = this.state.highscores.beginner;
-
     scores.set({
       one: scoreArray[0],
       two: scoreArray[1],
@@ -189,26 +189,10 @@ class App extends React.Component {
       four: scoreArray[3],
       five: scoreArray[4]
     });
-    // let beginner = scoresB.push();
-    // let intermediate = scoresI.push();
-    // let expert = scoresE.push();
-    // beginner.set({
-    //   name: "Eddie",
-    //   time: 24
-    // });
-    // intermediate.set({
-    //   name: "Eddie",
-    //   time: 54  
-    // });
-    // expert.set({
-    //   name: "Eddie",
-    //   time: 103
-    // });
   }
 
   componentWillMount(props){  
     this.addHighScoresFromFirebase();
-   // this.addHighscore();
     if (page === "beginner") {
       this.restartSmallBoard();
     } else if (page === 'intermediate') {
@@ -249,7 +233,7 @@ class App extends React.Component {
         }
       }
     }
-    this.setState({faceIcon:won,gameOver:true});
+    this.setState({faceIcon:won,gameOver:true,openHighscoreModal:true});
   }
 
 
@@ -308,9 +292,7 @@ class App extends React.Component {
       }
     //  return board;
   }
-  topLeft() {
 
-  }
   checkTopForNumber(board,pos,arr){
     if (board[pos[0]-1][pos[1]] && board[pos[0]-1][pos[1]].space !== " " && board[pos[0]-1][pos[1]].space !== "X") {
     //  board[pos[0]-1][pos[1]].image = arr[board[pos[0]-1][pos[1]].space-1];
@@ -481,8 +463,8 @@ class App extends React.Component {
   }
   checkForNewHighscore(name){
     const scores = Object.assign({},this.state.highscores);
-    const newPage = page;
-    console.log("look here",this.state.currentPage);
+    let newCurrentPage = window.location.href.split('/');
+    const newPage = newCurrentPage[newCurrentPage.length-1];
     let newScores;
     if (newPage === "beginner") {
       newScores = scores.beginner;
@@ -491,7 +473,6 @@ class App extends React.Component {
     } else if (newPage === "expert"){
       newScores = scores.expert;
     }
-  
     const gameTime = this.state.timer;
     if (gameTime >= newScores[4].time) {
       return;
@@ -508,48 +489,23 @@ class App extends React.Component {
       }
     }
   }
-  
-  enterScore(e){
-    
-    // const s = Object.assign({},this.state.highscores);
-    // const newEntry = {
-    //   name: e.target.value,
-    //   time: this.state.timer
-    // }
-    // s.beginner.push(newEntry);
-    // s.beginner.sort((a,b) => 
-    //   a.time - b.time
-    // );
-    // s.beginner.length = 5;
 
+  showHighscoreModal(){
+    this.setState({openHighscoreModal: true});
+  }
+  
+  enterScore(e){  
+    if (e.target.value.length < 13) {
     this.setState({playerName: e.target.value});
+    }
   }
 
-  
-  
   submitScore(e){
     e.preventDefault();
-    const newTime = this.state.timer;
-    const scores = Object.assign({},this.state.highscores);
+    // const newTime = this.state.timer;
+    // const scores = Object.assign({},this.state.highscores);
     this.checkForNewHighscore(this.state.playerName);
-   // this.addHighscore();
-
- //   this.setState({playerName: ""});
-   // let scores = firebase.database().ref('highscores/');
-    // let scoresI = firebase.database().ref('highscores/intermediate');
-    // let scoresE = firebase.database().ref('highscores/expert');
-    // let newScore = scores.push();
-    // let newBeginner = this.state.highscores.beginner.slice();
-    // let beginner = {};
-    // for (let i=0; i < newBeginner.length; i++) {
-    //   let test = i.toString();
-    //   beginner.test = newBeginner[i];
-    // }
-    // newScore.set({beginner});
-    // newScore.set({
-    //   name: e.target.value,
-    //   time: this.state.timer
-    // });
+    this.setState({playerName: "",openHighscoreModal: false});
   }
 
 
@@ -575,12 +531,22 @@ class App extends React.Component {
   }
 
   render(){
+    let main = {
+      // backgroundImage: `url(${background})`,
+      // backgroundRepeat: "no-repeat",
+      // backgroundSize: "cover",
+      // backgroundAttachment: "fixed",
+      // minHeight: "800px",
+      // opacity: ".5"
+    }
     return(
-      <div>
+      <div style={main}>
         <EnterHighScore
           enterScore={this.enterScore}
           submitScore={this.submitScore}
           playerName={this.state.playerName}
+          openHighscoreModal={this.state.openHighscoreModal}
+          timer={this.state.timer}
           />
       <Header
         restartSmallBoard={this.restartSmallBoard}
