@@ -148,6 +148,7 @@ describe("Creates nested array with objects corresponding to each square, virtua
   });
 });
 
+
 describe("Checks for bomb locations when a square is clicked.",()=>{
   const blankBoard = [
     [{space:" "},{space:" "},{space:" "}],
@@ -282,3 +283,83 @@ describe("Checks for bomb locations when a square is clicked.",()=>{
     expect(newBoard.bombNumb(allBombsBoard,newBoard.topRowBombs,newBoard.middleRowBombs,newBoard.bottomRowBombs)).toEqual(allBombsBoardWithNumber);
   });
 });
+
+
+describe("loop though objects properties and push them to an array using creatArrayOfScores() method",()=>{
+  const testScores = {
+    one: {name: "one", time: 1},
+    two: {name: "two", time: 2},
+    three: {name: "three", time: 3},
+  }
+  const testArr = [testScores.one,testScores.two,testScores.three];
+  it("should test if creatArrayOfScores() returns ther correct data type, object",()=>{
+    expect("object").toEqual(typeof newBoard.creatArrayOfScores(testScores));
+  });
+  it("should loop through the object and push the FIRST property to an array with creatArrayOfScores()",()=>{
+    expect(testScores.one).toEqual(newBoard.creatArrayOfScores(testScores)[0]);
+  });
+  it("should loop through the object and push the SECOND property to an array with creatArrayOfScores()",()=>{
+    expect(testScores.two).toEqual(newBoard.creatArrayOfScores(testScores)[1]);
+  });
+  it("shouls loop through the object and push the THIRD property to an array with creatArrayOfScores()",()=>{
+    expect(testScores.three).toEqual(newBoard.creatArrayOfScores(testScores)[2]);
+  });
+});
+
+describe("sorts an array of objects (high scores) based on the 'time' property. Lowest time to highest with sortScores()",()=>{
+  const one = {name: "one", time: 1};
+  const two = {name: "two", time: 2};
+  const three = {name: "three", time: 3};
+  let testArray = [three,one,two];
+  it("should sort the array with the lowest 'time' in the FIRST index positon",()=>{
+    expect(one).toEqual(newBoard.sortScores(testArray)[0]);
+  })
+  it("should sort the array with the second lowest 'time' in the SECOND index position",()=>{
+    expect(two).toEqual(newBoard.sortScores(testArray)[1]);
+  });
+  it("should sort the array with the third lowest 'time' in the THIRD index position",()=>{
+    expect(three).toEqual(newBoard.sortScores(testArray)[2]);
+  });
+});
+
+describe("should create an object containing the properties 'beginner','intermediate' and 'expert' which each contain an array of objects the correspond to a high score (lowest to highest). Uses sortHighScores()",()=>{
+  const testScores = {
+    beginner: {
+      two: {name: "twoBeginner", time: 2},
+      one: {name: "oneBeginner", time: 1}
+    },
+    intermediate: {
+      two: {name: "twoIntermediate", time: 2},
+      one: {name: "oneIntermediate", time: 1}
+    },
+    expert: {
+      two: {name: "twoExpert", time: 2},
+      one: {name: "oneExpert", time: 1}
+    }
+  }
+  const sorted = newBoard.sortHighScores(testScores);
+
+  it("should sort array in the 'beginner' property with the first lowest 'time' in the FIRST index position",()=>{
+    expect(testScores.beginner.one).toEqual(sorted.beginner[0]);
+  });
+  it("should sort array in the 'beginner' property with the second lowest 'time' in the SECOND index position",()=>{
+    expect(testScores.beginner.two).toEqual(sorted.beginner[1]);
+  });
+  ////
+  it("should sort array in the 'intermediate' property with the first lowest 'time' in the FIRST index position",()=>{
+    expect(testScores.intermediate.one).toEqual(sorted.intermediate[0]);
+  });
+  it("should sort array in the 'intermediate' property with the second lowest 'time' in the SECOND index position",()=>{
+    expect(testScores.intermediate.two).toEqual(sorted.intermediate[1]);
+  });
+  ///
+  it("should sort array in the 'expert' property with the first lowest 'time' in the FIRST index position",()=>{
+    expect(testScores.expert.one).toEqual(sorted.expert[0]);
+  });
+  it("should sort array in the 'expert' property with the second lowest 'time' in the SECOND index position",()=>{
+    expect(testScores.expert.two).toEqual(sorted.expert[1]);
+  });
+
+
+});
+

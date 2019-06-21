@@ -12,7 +12,13 @@ it('renders Board without crashing', () => {
   ReactDOM.render(<BeginnerBoard 
     genBoard={newBoard.genBoard}
     beginnerBoardMain={newBoard.state.beginnerBoardMain}
-    clickSquare={newBoard.clickSquare}/>, div);
+    restartSmallBoard={newBoard.restartSmallBoard}
+    faceIcon={newBoard.state.faceIcon}
+    flagCount={newBoard.state.flagCount}
+    timer={newBoard.state.timer}
+    gameTimer={newBoard.gameTimer}
+    highscores={newBoard.state.highscores.beginner}
+    />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
 

@@ -154,7 +154,6 @@ class App extends React.Component {
     scores.sort((a,b) => 
       a.time - b.time
     );
-    console.log(scores);
     return scores;
   }
 
@@ -192,6 +191,7 @@ class App extends React.Component {
   }
 
   componentWillMount(props){  
+    
     this.addHighScoresFromFirebase();
     if (page === "beginner") {
       this.restartSmallBoard();
@@ -531,14 +531,15 @@ class App extends React.Component {
   }
 
   render(){
-    let main = {
-      // backgroundImage: `url(${background})`,
-      // backgroundRepeat: "no-repeat",
-      // backgroundSize: "cover",
-      // backgroundAttachment: "fixed",
-      // minHeight: "800px",
-      // opacity: ".5"
+    let main;
+    if (window.screen.width < 450) {
+       main = {
+         zoom:'140%'
+       }
+    } else {
+      main = null;
     }
+
     return(
       <div style={main}>
         <EnterHighScore
