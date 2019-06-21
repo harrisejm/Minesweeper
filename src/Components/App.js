@@ -27,6 +27,10 @@ import IntermediateBoard from './IntermediateBoard';
 import ExpertBoard from './ExpertBoard';
 import Home from './Home';
 import Header from './Header';
+import EnterHighScore from './EnterHighScore'
+
+let currentPage = window.location.href.split('/');
+let page = currentPage[currentPage.length-1];
 
 class App extends React.Component {
   constructor(props) {
@@ -43,8 +47,13 @@ class App extends React.Component {
       restart: false,
       timer: 0,
       firstMove: true,
+      playerName: "",
       arr: [one,two,three,four,five,six,seven,eight],
-      highscores: {}
+      highscores: {
+        beginner: [{},{},{},{},{},{},{},{},{},{}],
+        intermediate: [{},{},{},{},{},{},{},{},{},{}],
+        expert: [{},{},{},{},{},{},{},{},{},{}]
+      }
     }
     this.createBoard = this.createBoard.bind(this);
     this.bombs = this.bombs.bind(this);
@@ -56,6 +65,9 @@ class App extends React.Component {
     this.restartExpertBoard = this.restartExpertBoard.bind(this);
     this.gameTimer = this.gameTimer.bind(this);
     this.genBoard = this.genBoard.bind(this);
+    this.submitScore = this.submitScore.bind(this);
+    this.enterScore = this.enterScore.bind(this);
+    this.checkForNewHighscore = this.checkForNewHighscore.bind(this);
   }
 
   newBoard(size) {
@@ -119,26 +131,84 @@ class App extends React.Component {
     return finalBoard;
   }
 
+  sortHighScores(scores) {
+    const highscores = {
+      beginner: this.sortScores(this.creatArrayOfScores(scores.beginner)),
+      intermediate: this.sortScores(this.creatArrayOfScores(scores.intermediate)),
+      expert: this.sortScores(this.creatArrayOfScores(scores.expert))
+    }
+    return highscores;
+  }
+  creatArrayOfScores(scores){
+    let scoresArray = [];
+    for (let score in scores) {
+      scoresArray.push(scores[score]);
+    }
+    return scoresArray;
+  }
+  sortScores(scores) {
+    scores.sort((a,b) => 
+      a.time - b.time
+    );
+    console.log(scores);
+    return scores;
+  }
+
   addHighScoresFromFirebase(){
     let dbClick = firebase.database().ref('highscores');
     dbClick.on('value',(snapshot)=> {
       let test = snapshot.val();
-      this.setState({highscores: test});
+      this.setState({highscores: this.sortHighScores(test)});
       console.log(this.state.highscores);
-      });
+    });
   }
   addHighscore(){
-    let dbClick = firebase.database().ref('highscores/beginner');
-    let beginner = dbClick.push();
-    beginner.set({
-      name: "Eddie",
-      time: 24
+    let currentPage = window.location.href.split('/'); 
+    let page = currentPage[currentPage.length-1];
+    const allScores = Object.assign({},this.state.highscores);
+    let scoreArray;
+    let scores;
+    if (page === "beginner") {
+      scores = firebase.database().ref('highscores/beginner');
+      scoreArray = allScores.beginner
+    } else if (page === "intermediate") {
+      scores = firebase.database().ref('highscores/intermediate');
+      scoreArray = allScores.intermediate;
+    } else if (page === 'expert') {
+      scores = firebase.database().ref('highscores/expert');
+      scoreArray = allScores.expert;
+    }
+  
+    console.log("New",scoreArray)
+   // let scoreArray = this.state.highscores.beginner;
+
+    scores.set({
+      one: scoreArray[0],
+      two: scoreArray[1],
+      three: scoreArray[2],
+      four: scoreArray[3],
+      five: scoreArray[4]
     });
+    // let beginner = scoresB.push();
+    // let intermediate = scoresI.push();
+    // let expert = scoresE.push();
+    // beginner.set({
+    //   name: "Eddie",
+    //   time: 24
+    // });
+    // intermediate.set({
+    //   name: "Eddie",
+    //   time: 54  
+    // });
+    // expert.set({
+    //   name: "Eddie",
+    //   time: 103
+    // });
   }
 
   componentWillMount(props){  
-    let currentPage = window.location.href.split('/');
-    let page = currentPage[currentPage.length-1];
+    this.addHighScoresFromFirebase();
+   // this.addHighscore();
     if (page === "beginner") {
       this.restartSmallBoard();
     } else if (page === 'intermediate') {
@@ -409,6 +479,79 @@ class App extends React.Component {
     }
     return board;
   }
+  checkForNewHighscore(name){
+    const scores = Object.assign({},this.state.highscores);
+    const newPage = page;
+    console.log("look here",this.state.currentPage);
+    let newScores;
+    if (newPage === "beginner") {
+      newScores = scores.beginner;
+    } else if (newPage === "intermediate"){
+      newScores = scores.intermediate;
+    } else if (newPage === "expert"){
+      newScores = scores.expert;
+    }
+  
+    const gameTime = this.state.timer;
+    if (gameTime >= newScores[4].time) {
+      return;
+    }
+    for (let i=0; i<newScores.length; i++) {
+      if (gameTime > newScores[i].time) {
+        continue;
+      } else {
+        newScores.splice(i,0,{name: name,time: gameTime});
+        newScores.pop();
+        this.addHighscore(newScores);
+        this.setState({highscores: scores});
+        break;
+      }
+    }
+  }
+  
+  enterScore(e){
+    
+    // const s = Object.assign({},this.state.highscores);
+    // const newEntry = {
+    //   name: e.target.value,
+    //   time: this.state.timer
+    // }
+    // s.beginner.push(newEntry);
+    // s.beginner.sort((a,b) => 
+    //   a.time - b.time
+    // );
+    // s.beginner.length = 5;
+
+    this.setState({playerName: e.target.value});
+  }
+
+  
+  
+  submitScore(e){
+    e.preventDefault();
+    const newTime = this.state.timer;
+    const scores = Object.assign({},this.state.highscores);
+    this.checkForNewHighscore(this.state.playerName);
+   // this.addHighscore();
+
+ //   this.setState({playerName: ""});
+   // let scores = firebase.database().ref('highscores/');
+    // let scoresI = firebase.database().ref('highscores/intermediate');
+    // let scoresE = firebase.database().ref('highscores/expert');
+    // let newScore = scores.push();
+    // let newBeginner = this.state.highscores.beginner.slice();
+    // let beginner = {};
+    // for (let i=0; i < newBeginner.length; i++) {
+    //   let test = i.toString();
+    //   beginner.test = newBeginner[i];
+    // }
+    // newScore.set({beginner});
+    // newScore.set({
+    //   name: e.target.value,
+    //   time: this.state.timer
+    // });
+  }
+
 
   genBoard(bombLocations) {
     const board = (
@@ -434,6 +577,11 @@ class App extends React.Component {
   render(){
     return(
       <div>
+        <EnterHighScore
+          enterScore={this.enterScore}
+          submitScore={this.submitScore}
+          playerName={this.state.playerName}
+          />
       <Header
         restartSmallBoard={this.restartSmallBoard}
         restartIntermediateBoard={this.restartIntermediateBoard}
@@ -449,18 +597,17 @@ class App extends React.Component {
         flagCount={this.state.flagCount}
         timer={this.state.timer}
         gameTimer={this.gameTimer}
-        highscores={this.state.highscores}
+        highscores={this.state.highscores.beginner}
       />}/>
         <Route exact path='/intermediate' render={()=><IntermediateBoard
-        // createBoard={this.createBoard}
         genBoard={this.genBoard}
         beginnerBoardMain={this.state.beginnerBoardMain}
-        // clickSquare={this.clickSquare}
         restartIntermediateBoard={this.restartIntermediateBoard}
         faceIcon={this.state.faceIcon}
         flagCount={this.state.flagCount}
         timer={this.state.timer}
         gameTimer={this.gameTimer}
+        highscores={this.state.highscores.intermediate}
         />}/>
         <Route exact path='/expert' render={()=><ExpertBoard
         genBoard={this.genBoard}
@@ -470,6 +617,7 @@ class App extends React.Component {
         flagCount={this.state.flagCount}
         timer={this.state.timer}
         gameTimer={this.gameTimer}
+        highscores={this.state.highscores.expert}
         />}/>
       </Switch>
       </Router>

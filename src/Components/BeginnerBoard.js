@@ -1,13 +1,32 @@
 import React from 'react';
 
+function ranking(rank) {
+  let attachRank;
+  if (rank === 1) {
+    attachRank = "st";
+  } else if (rank === 2) {
+    attachRank = "nd";
+  } else if (rank === 3) {
+    attachRank = "rd";
+  } else {
+    attachRank = "th";
+  }
+  return attachRank;
+}
+
 function BeginnerBoard(props){
-  console.log(props.highscores.beginner);
+  console.log("BEGINNER",props.highscores);
   document.oncontextmenu = function() {
     return false;
   }
+
+
     
 return (
   <div>
+    <div className="gameDifficulty">
+      <p>Beginner</p>
+    </div>
   <div className="mainSmall">
     <div className="boardOutterSmallHeader">
       <div className="boardInnerSmallHeader">
@@ -28,9 +47,16 @@ return (
       </div>
     </div>
   </div>
+  <p className="scoreTitle">High Scores</p>
   <div className="highscoreSmall">
-  
-  </div>
+    {props.highscores.map((score,index) =>{
+      return (<div key={index} className="scoreEntry">
+                <span className="rank">{index+1}{ranking(index+1)}</span>
+                <span className="name">{score.name}</span><span className="score">{score.time}</span>
+              </div>)
+    })}
+    </div>
+
   </div>
 );
 }

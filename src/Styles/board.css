@@ -3,7 +3,6 @@ h1.mainTitle {
     font-family: Georgia;
     font-size: 56px;
 }
-
 div.mainNavbar {
     margin-left: auto;
     margin-right: auto;
@@ -112,7 +111,7 @@ div.home {
 }
 
 div.mainSmall {
-    border-style: solid;
+    /* border-style: solid; */
     width: 195px;
     margin-right: auto;
     margin-left: auto;
@@ -360,4 +359,48 @@ img.square {
   width: 20px;
   height: 20px;
   margin: -1px -1px -5px -1px;
+}
+
+.highscoreSmall {
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 1px;
+  width: 140px;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -10px;
+  font-size: 17px
+}
+.name {
+  display: inline-block;
+  /* border-style: solid; */
+} 
+.score {
+  float: right;
+  display: block;
+}
+ .scoreEntry {
+  margin-bottom: 3px;
+}
+.hello {
+  margin-top: 30px;
+}
+.gameDifficulty {
+    font-family: Georgia;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+}
+.scoreTitle {
+    font-family: Georgia;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 50px;
+}
+.rank {
+    display: inline-block;
+    /* border-style: solid; */
+    width: 30px;
 }
